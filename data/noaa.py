@@ -7,7 +7,17 @@ import pandas as pd
 # https://www.ncei.noaa.gov/pub/data/uscrn/products/soil/soilanom01/readme.txt
 # https://www.ncei.noaa.gov/pub/data/uscrn/products/soil/soilanom01/
 
-st.title ("NOAA Quality Controlled Dataset Analysis")
+DATE_COLUMN = 'DATE_TIME'
+DATA_URL = 'data/CRNSSM0101-CO_Boulder_14_W.csv'
+
+def load_data(nrows: int | None = None):
+    data = pd.read_csv(DATA_URL, nrows=nrows)
+    # lowercase = lambda x: str(x).lower()
+    # data.rename(lowercase, axis='columns', inplace=True)
+    data[DATE_COLUMN] = pd.to_datetime(data[DATE_COLUMN], format='%Y%m%d%H')
+    return data
+
+st.title ("NOAA Dataset Analysis")
 st.header("Standardized Soil Moisture")
 st.markdown("""    
     This standardized soil moisture product is derived using the soil moisture
@@ -19,8 +29,25 @@ st.markdown("""
 """)
 st.latex(r''' SMANOM = (SMVWC - MEDIAN) / (IQR) ''')
 
-data = pd.read_csv('data/CRNSSM0101-CO_Boulder_14_W.csv')
+
+data_load_state = st.text('Loading data...')
+data = load_data(10000)
+data_load_state.text('Loading data...done!')
+
+st.subheader('Raw data')
+st.write(data)
+
+st.subheader('Samplings per hour')
+hist_values = np.histogram(
+    data[DATE_COLUMN].dt.hour, bins=24, range=(0,24))[0]
+st.bar_chart(hist_values)
+
+
 plt.plot(data['SMANOM_5_CM'])
+
 st.pyplot(plt)
 plt.clf()
+
+
+
 
