@@ -37,14 +37,23 @@ data_load_state.text('Loading data...done!')
 st.subheader('Raw data')
 st.write(data)
 
-st.subheader('Samplings per hour')
-hist_values = np.histogram(
-    data[DATE_COLUMN].dt.hour, bins=24, range=(0,24))[0]
-st.bar_chart(hist_values)
+# histogram for soil moisture anomaly at 5 cm depth
+plt.figure(figsize=(10, 6))
+plt.hist(data['SMANOM_5_CM'], bins=30, edgecolor='black')
+plt.title('Histogram of Soil Moisture Anomaly at 5 cm Depth')
+plt.xlabel('Soil Moisture Anomaly (IQR Deviations)')
+plt.ylabel('Frequency')
+plt.grid(True)
+st.pyplot(plt)
+plt.clf()
 
-
-plt.plot(data['SMANOM_5_CM'])
-
+# vizualize soil moisture anomaly at 5 cm depth over time
+plt.figure(figsize=(10, 6))
+plt.plot(data['DATE_TIME'], data['SMANOM_5_CM'], marker='o')
+plt.title('Soil Moisture Anomaly at 5 cm Depth Over Time')
+plt.xlabel('Date Time')
+plt.ylabel('Soil Moisture Anomaly (IQR Deviations)')
+plt.grid(True)
 st.pyplot(plt)
 plt.clf()
 
