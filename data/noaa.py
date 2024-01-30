@@ -8,7 +8,7 @@ import pandas as pd
 # https://www.ncei.noaa.gov/pub/data/uscrn/products/soil/soilanom01/
 
 DATE_COLUMN = 'DATE_TIME'
-DATA_URL = 'data/CRNSSM0101-CO_Boulder_14_W.csv'
+DATA_URL =  'https://www.ncei.noaa.gov/pub/data/uscrn/products/soil/soilanom01/CRNSSM0101-CO_Boulder_14_W.csv'
 
 def load_data(nrows: int | None = None):
     data = pd.read_csv(DATA_URL, nrows=nrows)
